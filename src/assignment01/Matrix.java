@@ -71,6 +71,23 @@ public class Matrix {
      * resulting matrix, and fill it in with the correct values for matrix
      * multiplication
      */
+
+    if (this.numColumns != matrix.numRows) { // If the no. of columns of the LHS matrix 'this' does not match the no. of rows of the RHS matrix 'matrix', return null.
+      return null;
+    }
+
+    int data[][] = new int[this.numRows][matrix.numColumns];
+
+    for (int i = 0; i < this.numRows; i++) {
+      int value = 0;
+      for (int j = 0; j < this.numColumns; j++) {
+        value += this.data[i][j] * matrix.data[j][i];
+      }
+
+
+    }
+
+
     return null; // placeholder
   }
 
