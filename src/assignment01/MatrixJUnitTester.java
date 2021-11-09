@@ -12,12 +12,14 @@ public class MatrixJUnitTester {
 
   Matrix threeByTwo, twoByThree, twoByTwoResult;
   private Matrix threeByTwoDuplicate;
+  private Matrix threeByTwoAdded;
   /* Initialize some matrices we can play with for every test! */
 
   @Before
   public void setup() {
     threeByTwo = new Matrix(new int[][] { { 1, 2, 3 }, { 2, 5, 6 } });
     threeByTwoDuplicate = new Matrix(new int[][] { { 1, 2, 3 }, { 2, 5, 6 } });
+    threeByTwoAdded = new Matrix(new int[][] { { 2, 4, 6 }, { 4, 10, 12 } });
     twoByThree = new Matrix(new int[][] { { 4, 5 }, { 3, 2 }, { 1, 1 } });
     // this is the known correct result of multiplying M1 by M2
     twoByTwoResult = new Matrix(new int[][] { { 13, 12 }, { 29, 26 } });
@@ -44,4 +46,11 @@ public class MatrixJUnitTester {
   public void equals() {
     Assert.assertTrue(threeByTwo.equals(threeByTwoDuplicate));
   }
+
+  @Test
+  public void threeByTwoAddition() {
+    Assert.assertTrue(threeByTwoAdded.equals(threeByTwo.plus(threeByTwoDuplicate)));
+  }
 }
+
+

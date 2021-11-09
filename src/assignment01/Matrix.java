@@ -3,10 +3,10 @@ package assignment01;
 public class Matrix {
   int numRows;
   int numColumns;
-  int data[][];
+  int[][] data;
 
   // Constructor with data for new matrix (automatically determines dimensions)
-  public Matrix(int data[][]) {
+  public Matrix(int[][] data) {
     numRows = data.length; // d.length is the number of 1D arrays in the 2D array
     if (numRows == 0) {
       numColumns = 0;
@@ -64,19 +64,12 @@ public class Matrix {
   }
 
   public Matrix times(Matrix matrix) {
-    /*
-     * TODO: replace the below return statement with the correct code, This function
-     * must check if the two matrices are compatible for multiplication, if not,
-     * return null. If they are compatible, determine the dimensions of the
-     * resulting matrix, and fill it in with the correct values for matrix
-     * multiplication
-     */
 
     if (this.numColumns != matrix.numRows) { // If the no. of columns of the LHS matrix 'this' does not match the no. of rows of the RHS matrix 'matrix', return null.
       return null;
     }
 
-    int data[][] = new int[this.numRows][matrix.numColumns];
+    int[][] data = new int[this.numRows][matrix.numColumns];
     int value = 0;
 
     for (int i = 0; i < this.numRows; i++) { // Iterate over the rows of 'this' --> Aids the construction of the new matrix and in calculation of new values.
@@ -89,17 +82,23 @@ public class Matrix {
       }
     }
 
-
     return new Matrix(data); // Return the new matrix
   }
 
   public Matrix plus(Matrix matrix) {
-    /*
-     * TODO: replace the below return statement with the correct code, This function
-     * must check if the two matrices are compatible for addition, if not, return
-     * null. If they are compatible, create a new matrix and fill it in with the
-     * correct values for matrix addition
-     */
-    return null; // placeholder
+
+    if (this.numRows != matrix.numRows && this.numColumns != matrix.numColumns) {
+      return null; // Return null if the dimension are not compatible.
+    }
+
+    int data[][] = new int[this.numRows][this.numColumns];
+
+    for (int i = 0; i < this.numRows; i++) {
+      for (int j = 0; j < this.numColumns; j++) {
+        data[i][j] = this.data[i][j] + matrix.data[i][j];
+      }
+    }
+
+    return new Matrix(data); // Return the sum of two matrices.
   }
 }
