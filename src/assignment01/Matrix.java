@@ -30,12 +30,6 @@ public class Matrix {
     }
     Matrix matrix = (Matrix) other; // if the above was not true, we know it's safe to treat 'o' as a Matrix
 
-    /*
-     * TODO: replace the below return statement with the correct code, you must
-     * return the correct value after determining if this matrix is equal to the
-     * input matrix
-     */
-
     // Check if the dimensions are equals or not
     if (this.numColumns != matrix.numColumns && this.numRows != matrix.numRows) {
       return false; // Matrices are not equals
@@ -56,12 +50,17 @@ public class Matrix {
   @Override // instruct the compiler that we do indeed intend for this method to override
             // the superclass' (Object) version
   public String toString() {
-    /*
-     * TODO: replace the below return statement with the correct code, you must
-     * return a String that represents this matrix, as specified on the assignment
-     * page
-     */
-    return ""; // placeholder
+
+    String result = "";
+
+    for (int i = 0; i < this.numRows; i++) {
+      for (int j = 0; j < this.numColumns; j++) {
+        result += this.data[i][j] + " "; // Add each element to the result string followed by a space.
+      }
+      result += "\n"; // Add a newline character to the result string at the end of each row.
+    }
+
+    return result; // return the result string.
   }
 
   public Matrix times(Matrix matrix) {

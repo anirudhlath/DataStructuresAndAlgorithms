@@ -36,7 +36,7 @@ public class MatrixJUnitTester {
 
   @Test
   public void twoByTwoToString() {
-    String resultString = "what should it equal?";
+    String resultString = "13 12 \n29 26 \n";
     Assert.assertEquals(resultString, twoByTwoResult.toString());
   }
 
