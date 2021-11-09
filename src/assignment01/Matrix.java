@@ -1,3 +1,8 @@
+/**
+ * @author Anirudh Lath
+ * @project ${PROJECT_NAME}
+ * @created ${MONTH}/${DAY}/${YEAR} - ${TIME}
+ */
 package assignment01;
 
 public class Matrix {
@@ -87,7 +92,7 @@ public class Matrix {
 
   public Matrix plus(Matrix matrix) {
 
-    if (this.numRows != matrix.numRows && this.numColumns != matrix.numColumns) {
+    if (this.numRows != matrix.numRows || this.numColumns != matrix.numColumns) {
       return null; // Return null if the dimension are not compatible.
     }
 
