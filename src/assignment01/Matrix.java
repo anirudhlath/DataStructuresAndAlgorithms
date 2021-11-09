@@ -77,18 +77,20 @@ public class Matrix {
     }
 
     int data[][] = new int[this.numRows][matrix.numColumns];
+    int value = 0;
 
-    for (int i = 0; i < this.numRows; i++) {
-      int value = 0;
-      for (int j = 0; j < this.numColumns; j++) {
-        value += this.data[i][j] * matrix.data[j][i];
+    for (int i = 0; i < this.numRows; i++) { // Iterate over the rows of 'this' --> Aids the construction of the new matrix and in calculation of new values.
+      for (int k = 0; k < matrix.numColumns; k++) { // Iterate over the columns of 'matrix' --> Aids the construction of the new matrix and in calculation of new values.
+        for (int j = 0; j < this.numColumns; j++) { // Iterate over the columns of 'this' --> Aids in calculation of new values.
+          value += this.data[i][j] * matrix.data[j][k];
+        }
+        data[i][k] = value; // I couldn't figure out a way to do it with just two loops.
+        value = 0; // Reset value to 0 before calculating another value.
       }
-
-
     }
 
 
-    return null; // placeholder
+    return new Matrix(data); // Return the new matrix
   }
 
   public Matrix plus(Matrix matrix) {
