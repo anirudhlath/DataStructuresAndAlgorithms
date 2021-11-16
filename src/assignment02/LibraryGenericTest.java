@@ -5,10 +5,14 @@ import java.util.GregorianCalendar;
 
 /**
  * Testing class for LibraryGeneric.
- *
  */
 public class LibraryGenericTest {
 
+  /**
+   * The entry point of application.
+   *
+   * @param args the input arguments
+   */
   public static void main(String[] args) {
 
     // test a library that uses names (String) to id patrons
@@ -34,6 +38,11 @@ public class LibraryGenericTest {
       System.err.println("TEST FAILED: lookup(holder)");
     if (!lib1.checkin(patron1))
       System.err.println("TEST FAILED: checkin(holder)");
+
+    // Comparator Tests for lib1
+
+    // Test getInventoryList()
+    ArrayList<LibraryBookGeneric<String>> inventoryList = new ArrayList<>();
 
     // test a library that uses phone numbers (PhoneNumber) to id patrons
     LibraryGeneric<PhoneNumber> lib2 = new LibraryGeneric<PhoneNumber>();

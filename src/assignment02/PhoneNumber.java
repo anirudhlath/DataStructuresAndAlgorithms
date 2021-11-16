@@ -2,7 +2,6 @@ package assignment02;
 
 /**
  * Class representation of a phone number.
- * 
  */
 public class PhoneNumber {
 
@@ -12,6 +11,11 @@ public class PhoneNumber {
 
   private String rest;
 
+  /**
+   * Instantiates a new Phone number.
+   *
+   * @param phoneNum the phone num
+   */
   public PhoneNumber(String phoneNum) {
     phoneNum = phoneNum.replaceAll("-|\\s|\\.|\\(|\\)", "");
 

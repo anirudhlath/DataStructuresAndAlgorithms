@@ -9,35 +9,34 @@ import java.util.Scanner;
 
 /**
  * Class representation of a library (a collection of library books).
- * 
  */
 public class Library {
 
   private ArrayList<LibraryBook> library;
 
+  /**
+   * Instantiates a new Library.
+   */
   public Library() {
     library = new ArrayList<LibraryBook>();
   }
 
   /**
    * Add the specified book to the library, assume no duplicates.
-   * 
-   * @param isbn
-   *          -- ISBN of the book to be added
-   * @param author
-   *          -- author of the book to be added
-   * @param title
-   *          -- title of the book to be added
+   *
+   * @param isbn   -- ISBN of the book to be added
+   * @param author -- author of the book to be added
+   * @param title  -- title of the book to be added
    */
   public void add(long isbn, String author, String title) {
     library.add(new LibraryBook(isbn, author, title));
+    assert true;
   }
 
   /**
    * Add the list of library books to the library, assume no duplicates.
-   * 
-   * @param list
-   *          -- list of library books to be added
+   *
+   * @param list -- list of library books to be added
    */
   public void addAll(ArrayList<LibraryBook> list) {
     library.addAll(list);
@@ -46,10 +45,10 @@ public class Library {
   /**
    * Add books specified by the input file. One book per line with ISBN, author,
    * and title separated by tabs.
-   * 
+   * <p>
    * If file does not exist or format is violated, do nothing.
-   * 
-   * @param filename
+   *
+   * @param filename the filename
    */
   public void addAll(String filename) {
     ArrayList<LibraryBook> toBeAdded = new ArrayList<LibraryBook>();
@@ -96,11 +95,11 @@ public class Library {
 
   /**
    * Returns the holder of the library book with the specified ISBN.
-   * 
+   * <p>
    * If no book with the specified ISBN is in the library, returns null.
-   * 
-   * @param isbn
-   *          -- ISBN of the book to be looked up
+   *
+   * @param isbn -- ISBN of the book to be looked up
+   * @return the string
    */
   public String lookup(long isbn) {
     for (LibraryBook book:
@@ -115,11 +114,11 @@ public class Library {
 
   /**
    * Returns the list of library books checked out to the specified holder.
-   * 
+   * <p>
    * If the specified holder has no books checked out, returns an empty list.
-   * 
-   * @param holder
-   *          -- holder whose checked out books are returned
+   *
+   * @param holder -- holder whose checked out books are returned
+   * @return the array list
    */
   public ArrayList<LibraryBook> lookup(String holder) {
     ArrayList<LibraryBook> booksOfHolder = new ArrayList<>();
@@ -134,24 +133,19 @@ public class Library {
 
   /**
    * Sets the holder and due date of the library book with the specified ISBN.
-   * 
+   * <p>
    * If no book with the specified ISBN is in the library, returns false.
-   * 
+   * <p>
    * If the book with the specified ISBN is already checked out, returns false.
-   * 
+   * <p>
    * Otherwise, returns true.
-   * 
-   * @param isbn
-   *          -- ISBN of the library book to be checked out
-   * @param holder
-   *          -- new holder of the library book
-   * @param month
-   *          -- month of the new due date of the library book
-   * @param day
-   *          -- day of the new due date of the library book
-   * @param year
-   *          -- year of the new due date of the library book
-   * 
+   *
+   * @param isbn   -- ISBN of the library book to be checked out
+   * @param holder -- new holder of the library book
+   * @param month  -- month of the new due date of the library book
+   * @param day    -- day of the new due date of the library book
+   * @param year   -- year of the new due date of the library book
+   * @return the boolean
    */
   public boolean checkout(long isbn, String holder, int month, int day, int year) {
     for (LibraryBook book :
@@ -167,15 +161,15 @@ public class Library {
 
   /**
    * Unsets the holder and due date of the library book.
-   * 
+   * <p>
    * If no book with the specified ISBN is in the library, returns false.
-   * 
+   * <p>
    * If the book with the specified ISBN is already checked in, returns false.
-   * 
+   * <p>
    * Otherwise, returns true.
-   * 
-   * @param isbn
-   *          -- ISBN of the library book to be checked in
+   *
+   * @param isbn -- ISBN of the library book to be checked in
+   * @return the boolean
    */
   public boolean checkin(long isbn) {
     for (LibraryBook book :
@@ -191,13 +185,13 @@ public class Library {
   /**
    * Unsets the holder and due date for all library books checked out be the
    * specified holder.
-   * 
+   * <p>
    * If no books with the specified holder are in the library, returns false;
-   * 
+   * <p>
    * Otherwise, returns true.
-   * 
-   * @param holder
-   *          -- holder of the library books to be checked in
+   *
+   * @param holder -- holder of the library books to be checked in
+   * @return the boolean
    */
   public boolean checkin(String holder) {
     boolean result = false;

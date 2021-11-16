@@ -6,11 +6,14 @@ import java.util.Random;
 
 /**
  * Testing class for Library.
- * 
- * 
  */
 public class LibraryTest {
 
+  /**
+   * The entry point of application.
+   *
+   * @param args the input arguments
+   */
   public static void main(String[] args) {
     // test an empty library
     Library lib = new Library();
@@ -58,12 +61,12 @@ public class LibraryTest {
   /**
    * Returns a library of "dummy" books (random ISBN and placeholders for author
    * and title).
-   * 
+   * <p>
    * Useful for collecting running times for operations on libraries of varying
    * size.
-   * 
-   * @param size
-   *          -- size of the library to be generated
+   *
+   * @param size -- size of the library to be generated
+   * @return the array list
    */
   public static ArrayList<LibraryBook> generateLibrary(int size) {
     ArrayList<LibraryBook> result = new ArrayList<LibraryBook>();
@@ -83,9 +86,11 @@ public class LibraryTest {
 
   /**
    * Returns a randomly-generated ISBN (a long with 13 digits).
-   * 
+   * <p>
    * Useful for collecting running times for operations on libraries of varying
    * size.
+   *
+   * @return the long
    */
   public static long generateIsbn() {
     Random randomNumGen = new Random();

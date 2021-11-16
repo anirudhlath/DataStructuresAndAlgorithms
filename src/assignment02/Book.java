@@ -3,9 +3,8 @@ package assignment02;
 /**
  * Class representation of a book. The ISBN, author, and title can never change
  * once the book is created.
- * 
+ * <p>
  * Note that ISBNs are unique.
- *
  */
 public class Book {
 
@@ -15,6 +14,13 @@ public class Book {
 
   private String title;
 
+  /**
+   * Instantiates a new Book.
+   *
+   * @param isbn   the isbn
+   * @param author the author
+   * @param title  the title
+   */
   public Book(long isbn, String author, String title) {
     this.isbn = isbn;
     this.author = author;
@@ -22,6 +28,8 @@ public class Book {
   }
 
   /**
+   * Gets author.
+   *
    * @return the author
    */
   public String getAuthor() {
@@ -29,6 +37,8 @@ public class Book {
   }
 
   /**
+   * Gets isbn.
+   *
    * @return the ISBN
    */
   public long getIsbn() {
@@ -36,6 +46,8 @@ public class Book {
   }
 
   /**
+   * Gets title.
+   *
    * @return the title
    */
   public String getTitle() {

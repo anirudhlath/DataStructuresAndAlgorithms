@@ -10,25 +10,26 @@ import java.util.Scanner;
 
 /**
  * Class representation of a library (a collection of library books).
- * 
+ *
+ * @param <Type> the type parameter
  */
 public class LibraryGeneric<Type> {
 
   private ArrayList<LibraryBookGeneric<Type>> library;
 
+  /**
+   * Instantiates a new Library generic.
+   */
   public LibraryGeneric() {
     library = new ArrayList<>();
   }
 
   /**
    * Add the specified book to the library, assume no duplicates.
-   * 
-   * @param isbn
-   *          -- ISBN of the book to be added
-   * @param author
-   *          -- author of the book to be added
-   * @param title
-   *          -- title of the book to be added
+   *
+   * @param isbn   -- ISBN of the book to be added
+   * @param author -- author of the book to be added
+   * @param title  -- title of the book to be added
    */
   public void add(long isbn, String author, String title) {
     library.add(new LibraryBookGeneric<>(isbn, author, title));
@@ -36,9 +37,8 @@ public class LibraryGeneric<Type> {
 
   /**
    * Add the list of library books to the library, assume no duplicates.
-   * 
-   * @param list
-   *          -- list of library books to be added
+   *
+   * @param list -- list of library books to be added
    */
   public void addAll(ArrayList<LibraryBookGeneric<Type>> list) {
     library.addAll(list);
@@ -47,10 +47,10 @@ public class LibraryGeneric<Type> {
   /**
    * Add books specified by the input file. One book per line with ISBN, author,
    * and title separated by tabs.
-   * 
+   * <p>
    * If file does not exist or format is violated, do nothing.
-   * 
-   * @param filename
+   *
+   * @param filename the filename
    */
   public void addAll(String filename) {
     ArrayList<LibraryBookGeneric<Type>> toBeAdded = new ArrayList<>();
@@ -97,11 +97,11 @@ public class LibraryGeneric<Type> {
 
   /**
    * Returns the holder of the library book with the specified ISBN.
-   * 
+   * <p>
    * If no book with the specified ISBN is in the library, returns null.
-   * 
-   * @param isbn
-   *          -- ISBN of the book to be looked up
+   *
+   * @param isbn -- ISBN of the book to be looked up
+   * @return the type
    */
   public Type lookup(long isbn) {
     for (LibraryBookGeneric<Type> book:
@@ -115,11 +115,11 @@ public class LibraryGeneric<Type> {
 
   /**
    * Returns the list of library books checked out to the specified holder.
-   * 
+   * <p>
    * If the specified holder has no books checked out, returns an empty list.
-   * 
-   * @param holder
-   *          -- holder whose checked out books are returned
+   *
+   * @param holder -- holder whose checked out books are returned
+   * @return the array list
    */
   public ArrayList<LibraryBookGeneric<Type>> lookup(Type holder) {
     ArrayList<LibraryBookGeneric<Type>> booksOfHolder = new ArrayList<>();
@@ -134,24 +134,19 @@ public class LibraryGeneric<Type> {
 
   /**
    * Sets the holder and due date of the library book with the specified ISBN.
-   * 
+   * <p>
    * If no book with the specified ISBN is in the library, returns false.
-   * 
+   * <p>
    * If the book with the specified ISBN is already checked out, returns false.
-   * 
+   * <p>
    * Otherwise, returns true.
-   * 
-   * @param isbn
-   *          -- ISBN of the library book to be checked out
-   * @param holder
-   *          -- new holder of the library book
-   * @param month
-   *          -- month of the new due date of the library book
-   * @param day
-   *          -- day of the new due date of the library book
-   * @param year
-   *          -- year of the new due date of the library book
-   * 
+   *
+   * @param isbn   -- ISBN of the library book to be checked out
+   * @param holder -- new holder of the library book
+   * @param month  -- month of the new due date of the library book
+   * @param day    -- day of the new due date of the library book
+   * @param year   -- year of the new due date of the library book
+   * @return the boolean
    */
   public boolean checkout(long isbn, Type holder, int month, int day, int year) {
     for (LibraryBookGeneric<Type> book :
@@ -167,15 +162,15 @@ public class LibraryGeneric<Type> {
 
   /**
    * Unsets the holder and due date of the library book.
-   * 
+   * <p>
    * If no book with the specified ISBN is in the library, returns false.
-   * 
+   * <p>
    * If the book with the specified ISBN is already checked in, returns false.
-   * 
+   * <p>
    * Otherwise, returns true.
-   * 
-   * @param isbn
-   *          -- ISBN of the library book to be checked in
+   *
+   * @param isbn -- ISBN of the library book to be checked in
+   * @return the boolean
    */
   public boolean checkin(long isbn) {
     for (LibraryBookGeneric<Type> book :
@@ -191,13 +186,13 @@ public class LibraryGeneric<Type> {
   /**
    * Unsets the holder and due date for all library books checked out be the
    * specified holder.
-   * 
+   * <p>
    * If no books with the specified holder are in the library, returns false;
-   * 
+   * <p>
    * Otherwise, returns true.
-   * 
-   * @param holder
-   *          -- holder of the library books to be checked in
+   *
+   * @param holder -- holder of the library books to be checked in
+   * @return the boolean
    */
   public boolean checkin(Type holder) {
     boolean result = false;
@@ -210,8 +205,11 @@ public class LibraryGeneric<Type> {
     }
     return result;
   }
+
   /**
    * Returns the list of library books, sorted by ISBN (smallest ISBN first).
+   *
+   * @return the inventory list
    */
   public ArrayList<LibraryBookGeneric<Type>> getInventoryList() {
     ArrayList<LibraryBookGeneric<Type>> libraryCopy = new ArrayList<LibraryBookGeneric<Type>>();
@@ -226,6 +224,8 @@ public class LibraryGeneric<Type> {
 
   /**
    * Returns the list of library books, sorted by author
+   *
+   * @return the ordered by author
    */
   public ArrayList<LibraryBookGeneric<Type>> getOrderedByAuthor() {
     ArrayList<LibraryBookGeneric<Type>> libraryCopy = new ArrayList<LibraryBookGeneric<Type>>();
@@ -241,8 +241,13 @@ public class LibraryGeneric<Type> {
   /**
    * Returns the list of library books whose due date is older than the input
    * date. The list is sorted by date (oldest first).
-   *
+   * <p>
    * If no library books are overdue, returns an empty list.
+   *
+   * @param month the month
+   * @param day   the day
+   * @param year  the year
+   * @return the overdue list
    */
   public ArrayList<LibraryBookGeneric<Type>> getOverdueList(int month, int day,
                                                             int year) {
@@ -252,7 +257,9 @@ public class LibraryGeneric<Type> {
 
     for (LibraryBookGeneric<Type> book:
          library) {
-      if (book.getDueDate().compareTo(dueDate) > 0) {
+
+      if (book.getDueDate() != null && book.getDueDate().compareTo(dueDate) < 0) {
+        //System.out.println(book.getDueDate().getTime() + " " + book.getAuthor());
         libraryCopy.add(book);
       }
 
@@ -324,7 +331,7 @@ public class LibraryGeneric<Type> {
   protected class OrderByDueDate implements Comparator<LibraryBookGeneric<Type>> {
     @Override
     public int compare(LibraryBookGeneric<Type> lhs, LibraryBookGeneric<Type> rhs) {
-      return (lhs.getDueDate().compareTo(rhs.getDueDate()) * -1);
+      return (lhs.getDueDate().compareTo(rhs.getDueDate()));
     }
   }
 
