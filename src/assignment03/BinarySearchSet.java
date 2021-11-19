@@ -2,7 +2,7 @@ package assignment03;
 
 import java.util.*;
 
-public class BinarySearchSet<E> implements SortedSet<E>, Iterable<E> {
+public class BinarySearchSet<E> implements Iterable<E>, SortedSet<E> {
 
     private int capacity;
     public int size = 0;
@@ -203,15 +203,19 @@ public class BinarySearchSet<E> implements SortedSet<E>, Iterable<E> {
      */
     @Override
     public void clear() {
-
+        capacity = 40;
+        size = 0;
+        data = (E[]) new Object[capacity];
     }
 
     /**
-     * @param element@return true if this set contains the specified element
+     * @param element @return true if this set contains the specified element
      */
     @Override
     public boolean contains(Object element) {
-
+        if (data[driver((E) element)] == element) {
+            return true;
+        }
         return false;
     }
 
@@ -220,6 +224,9 @@ public class BinarySearchSet<E> implements SortedSet<E>, Iterable<E> {
      */
     @Override
     public boolean isEmpty() {
+        if (size == 0) {
+            return true;
+        }
         return false;
     }
 
@@ -247,7 +254,7 @@ public class BinarySearchSet<E> implements SortedSet<E>, Iterable<E> {
      */
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     /**
@@ -255,8 +262,8 @@ public class BinarySearchSet<E> implements SortedSet<E>, Iterable<E> {
      * (ascending) order.
      */
     @Override
-    public Object[] toArray() {
-        return new Object[0];
+    public E[] toArray() {
+        return data;
     }
 
     /**
@@ -276,6 +283,12 @@ public class BinarySearchSet<E> implements SortedSet<E>, Iterable<E> {
      */
     @Override
     public boolean containsAll(Collection elements) {
+        for (int i = 0; i < elements.size(); i++) {
+            if (data[driver((E) elements[i])] == elements[i]) {
+
+            }
+
+        }
         return false;
     }
 
