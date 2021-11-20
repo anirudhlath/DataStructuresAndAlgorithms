@@ -71,7 +71,7 @@ public class DoublyLinkedList<E> implements List<E>, Iterable<E> {
         LinkedNode<E> currentNode = head;
         if (index < size) {
             for (int i = 0; i < size; i++) {
-                if(i == index) {
+                if (i == index) {
                     LinkedNode<E> newNode = new LinkedNode<>(element);
                     newNode.previous = currentNode.previous;
                     newNode.next = currentNode;
@@ -341,15 +341,11 @@ public class DoublyLinkedList<E> implements List<E>, Iterable<E> {
         E data;
         DoublyLinkedList<E>.LinkedNode<E> previous;
         DoublyLinkedList<E>.LinkedNode<E> next;
-        int index;
-        static int nodeCount = 0;
 
         public LinkedNode(E data) {
-            this.data   = data;
-            index       = nodeCount;
-            previous    = null;
-            next        = null;
-            nodeCount++;
+            this.data = data;
+            previous = null;
+            next = null;
         }
 
     }
