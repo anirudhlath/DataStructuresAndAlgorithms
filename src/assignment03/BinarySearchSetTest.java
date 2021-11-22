@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -47,15 +46,10 @@ public class BinarySearchSetTest/* extends BinarySearchSet*/ {
     public void additionTest() {
         // Test Add
         Assert.assertTrue(arr1.add(2));
-        System.out.println(Arrays.toString(arr1.toArray()));
         Assert.assertTrue(arr1.add(5));
-        System.out.println(Arrays.toString(arr1.toArray()));
         Assert.assertTrue(arr1.add(-1));
-        System.out.println(Arrays.toString(arr1.toArray()));
         Assert.assertFalse(arr1.add(1));
-        System.out.println(Arrays.toString(arr1.toArray()));
         Assert.assertFalse(arr1.add(3));
-        System.out.println(Arrays.toString(arr1.toArray()));
         Assert.assertEquals(5, arr1.size());
         Object[] arr = new Integer[] {-1,1,2,3,5};
         if (arr.length == arr1.size()) {
@@ -121,11 +115,7 @@ public class BinarySearchSetTest/* extends BinarySearchSet*/ {
         set1.add(22);
         set1.add(23);
         set1.add(53);
-
         arr1.addAll(set1);
-
-        Object[] arr = new Integer[] {-11, -1, 1, 2, 3, 5, 12, 22, 23, 53};
-
         Assert.assertTrue(arr1.containsAll(set1));
         set1.add(554);
         Assert.assertFalse(arr1.containsAll(set1));
@@ -184,20 +174,18 @@ public class BinarySearchSetTest/* extends BinarySearchSet*/ {
 
         // Test toArray
         Random random = new Random();
-        int min = -500;
-        int max = 500;
-        for (int i = 0; i < 10000; i++) {
-            arr1.add((Integer) random.nextInt(max - min) + min);
-            System.out.println(Arrays.toString(arr1.toArray()));
+        int min = -50000;
+        int max = 50000;
+        for (int i = 0; i < 100000; i++) {
+            arr1.add(random.nextInt(max - min) + min);
         }
 
         Object[] arr = arr1.toArray();
-/*
         for (int i = 0; i < arr1.size() - 1; i++) {
-            if (Integer.valueOf((Integer) arr[i]) > (Integer.valueOf((Integer) arr[i + 1]))) {
+            if (Integer.valueOf((Integer) arr[i]) >= (Integer.valueOf((Integer) arr[i + 1]))) {
                 Assert.assertEquals(0 , 1);
             }
-        }*/
+        }
 
 
 

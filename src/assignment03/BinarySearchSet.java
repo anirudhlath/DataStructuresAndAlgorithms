@@ -1,6 +1,9 @@
 package assignment03;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * The class that can create, search and edits sets based on binary search algorithm.
@@ -43,15 +46,15 @@ public class BinarySearchSet<E> implements Iterable<E>, SortedSet<E> {
      * Driver function that checks if the set elements can be compared and if they can be then call binarySearch()
      *
      * @param element the element
-     * @throws ClassCastException if the elements cannot be compared naturally.
      * @return the index of the search element or the element that is lower than the element that is supposed to be added.
+     * @throws ClassCastException if the elements cannot be compared naturally.
      */
     public int driver(E element) {
-        if(hasNaturalComparator) {
+        if (hasNaturalComparator) {
             try {
                 myComparator.compare(element, element); // Check if the elements can be compared using a natural comparator.
             } catch (ClassCastException e) {
-                throw new ClassCastException("The object type is not comparable. Please assign a custom comparator."); 
+                throw new ClassCastException("The object type is not comparable. Please assign a custom comparator.");
             }
         }
         return binarySearch(data, element, 0, this.size - 1);
@@ -67,68 +70,34 @@ public class BinarySearchSet<E> implements Iterable<E>, SortedSet<E> {
      * @return the index
      */
     public int binarySearch(E[] arr, E element, int low, int high) {
-//        System.out.println("Size: " + size);
-//        System.out.println("Low: " + low + " | High: " + high);
+
         if (high >= low) {
             int mid = low + (high - low) / 2;
-            //System.out.println(mid);
 
-            try {
-                if (myComparator.compare(arr[mid], element) == 0) {
-                    return mid;
-                }
+            if (myComparator.compare(arr[mid], element) == 0) {
+                return mid;
+            }
 
-                if (myComparator.compare(arr[mid], element) > 0) {
-                    return binarySearch(arr, element, low, mid - 1);
-                }
+            if (myComparator.compare(arr[mid], element) > 0) {
+                return binarySearch(arr, element, low, mid - 1);
+            }
 
-                if (myComparator.compare(arr[mid], element) < 0) {
-                    return binarySearch(arr, element, mid + 1, high);
-                }
-            } catch (NullPointerException e) {
-                System.out.println("Size: " + size);
-                System.out.println("Low: " + low);
-                System.out.println("High: " + high);
-                System.out.println("Mid: " + mid);
-                System.out.println("arr[mid]: " + arr[mid]);
-                System.out.println("arr[size - 1]: " + arr[size - 1]);
-                System.out.println("element: " + element);
-                System.out.println("array: " + Arrays.toString(data));
-
-
-                e.printStackTrace();
+            if (myComparator.compare(arr[mid], element) < 0) {
+                return binarySearch(arr, element, mid + 1, high);
             }
         }
-        if (size != 0 && myComparator.compare(element, arr[0]) < 0) {
+        if (size != 0 && myComparator.compare(element, arr[0]) < 0) { // Case 1
             return 0;
-        } else if (size != 0 && myComparator.compare(element, arr[size - 1]) > 0) {
+        } else if (size != 0 && myComparator.compare(element, arr[size - 1]) > 0) { // Case 2
             return size;
-        } else if(size != 0) {
+        } else if (size != 0) {
             if (myComparator.compare(element, arr[low]) > 0) {
-                return low + 1;
+                return low + 1; // Case 3
             } else {
-                return low;
+                return low; // Case 4
             }
-            /*if (low >= high) {
-                return low;
-            } else {
-                return low + 1;
-            }*/
         }
         return 0;
-        /*if (high < 0) {
-            System.out.println("Case 1");
-            return 0;
-        } else if(low == size) {
-            System.out.println("Case 2");
-            return low;
-        } else if(low >= high) {
-            System.out.println("Case 3");
-            return high + 1;
-        } else {
-            System.exit(-1);
-            return -1;
-        }*/
     }
 
 
@@ -179,75 +148,35 @@ public class BinarySearchSet<E> implements Iterable<E>, SortedSet<E> {
     @Override
     public boolean add(E element) {
         int index = this.driver(element); // Call the driver
-        /*if (index < size && index >= 0) { // Case 1
-            if (data[index] != element) {
-                if (size < capacity - 5) {
-                    this.size++;
-                    for (int i = size + 1; i >= index; i--) { // Shift the elements to make space for the element to be added.
-                        data[i + 1] = data[i];
-                    }
-                    data[index] = element; // Add element to the anticipated location if it did not already exist.
-                    return true;
-                } else {
-                    this.size++;
-                    capacity = capacity * 2;
-                    E[] temp = data;
-                    data = (E[]) new Object[capacity];
-                    for (int i = 0; i < index; i++) {
-                        data[i] = temp[i];
-                    }
-                    data[index] = element;
-                    for (int i = index + 1; i < size; i++) {
-                        data[i] = temp[i];
-                    }
-                    return true;
-                }
-            }
-
-        } else if (index == size) { // Case 2
-            if (size < capacity - 5) {
-                this.size++;
-                data[index] = element;
-                return true;
-            } else {
-                this.size++;
-                capacity = capacity * 2;
-                E[] temp = data;
-                data = (E[]) new Object[capacity];
-                for (int i = 0; i < index; i++) {
-                    data[i] = temp[i];
-                }
-                data[index] = element;
-                return true;
-            }
+        if (size >= capacity) { // Increase capacity if needed.
+            increaseCapacity();
         }
-        */
-        if (size >= (capacity - 5)) {
-            capacity = capacity * 2;
-            E[] temp = data;
-            System.out.println("Increasing capacity");
-            data = (E[]) new Object[capacity];
-            for (int i = 0; i < size; i++) {
-                data[i] = temp[i];
-            }
-        } else if (data[index] != element){
-            if (index == size) {
-                System.out.println("Case 1");
-                data[index] = element;
-                size++;
-                return true;
+        if (index == size) { // If the element is supposed to be added in the end, don't compare or shift anything, just add.
+            data[index] = element; // Assign the element at the index
+            size++; // Increase size
+            return true;
 
-            } else {
-                System.out.println("Case 2");
-                CustomIterator iterator = new CustomIterator();
-                iterator.setCurrentIndex(index);
-                iterator.add();
-                data[index] = element;
-                size++;
-                return true;
-            }
+        } else if (myComparator.compare(data[index], element) != 0) { // Check if the element at index already exists, if not continue.
+            CustomIterator iterator = new CustomIterator();
+            iterator.setCurrentIndex(index); // Set iterator index to current index to optimise on time.
+            iterator.add(); // Shifts all the elements after the index.
+            data[index] = element;
+            size++;
+            return true;
         }
-        return false;
+        return false; // Return false if the element already exists
+    }
+
+    /**
+     * Increases capacity
+     */
+    private void increaseCapacity() {
+        capacity = capacity * 2;
+        E[] temp = data;
+        data = (E[]) new Object[capacity];
+        for (int i = 0; i < size; i++) {
+            data[i] = temp[i];
+        }
     }
 
     /**
@@ -364,7 +293,7 @@ public class BinarySearchSet<E> implements Iterable<E>, SortedSet<E> {
                 elements) {
             if (remove(e))
                 count++;
-            
+
         }
         if (count > 0)
             return true;
@@ -430,8 +359,7 @@ public class BinarySearchSet<E> implements Iterable<E>, SortedSet<E> {
                 E result = data[currentIndex];
                 currentIndex++;
                 return result;
-            }
-            else {
+            } else {
                 throw new NoSuchElementException("Index is out of range.");
             }
         }
@@ -461,16 +389,24 @@ public class BinarySearchSet<E> implements Iterable<E>, SortedSet<E> {
         @Override
         public void remove() {
             for (int i = currentIndex - 1; i < size; i++) {
-                data[i] = data[i+1];
+                data[i] = data[i + 1];
             }
         }
 
+        /**
+         * Add.
+         */
         public void add() {
             for (int i = size - 1; i >= currentIndex; i--) {
-                data[i+1] = data[i];
+                data[i + 1] = data[i];
             }
         }
 
+        /**
+         * Sets current index.
+         *
+         * @param index the index
+         */
         public void setCurrentIndex(int index) {
             currentIndex = index;
         }
@@ -482,9 +418,9 @@ public class BinarySearchSet<E> implements Iterable<E>, SortedSet<E> {
      *
      * @param <T> the type parameter
      */
-    class NaturalComparator<T extends Comparable<T>>  implements Comparator<T> {
+    class NaturalComparator<T extends Comparable<T>> implements Comparator<T> {
         @Override
-        public int compare(T a, T b){
+        public int compare(T a, T b) {
             return a.compareTo(b);
         }
     }
