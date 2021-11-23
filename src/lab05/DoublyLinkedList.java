@@ -28,8 +28,7 @@ public class DoublyLinkedList<E> implements List<E>, Iterable<E> {
         if (size == 0) {
             head = new LinkedNode<>(element);
             tail = head;
-            head.next = tail;
-            tail.previous = head;
+
         } else {
             LinkedNode<E> newNode = new LinkedNode<>(element);
             newNode.next = head;
@@ -71,7 +70,7 @@ public class DoublyLinkedList<E> implements List<E>, Iterable<E> {
     @Override
     public void add(int index, E element) throws IndexOutOfBoundsException {
         LinkedNode<E> currentNode = head;
-        if (index < size || index >= 0) {
+        if (index <= size && index >= 0) {
             for (int i = 0; i < size; i++) {
                 if (size > 0) {
                     if (i == index) {
@@ -129,7 +128,7 @@ public class DoublyLinkedList<E> implements List<E>, Iterable<E> {
     public E get(int index) throws IndexOutOfBoundsException {
         LinkedNode<E> currentNode = head;
 
-        if (index < size) {
+        if (index < size && index >= 0) {
             for (int i = 0; i < size; i++) {
                 if (i == index) {
                     break;
@@ -186,12 +185,28 @@ public class DoublyLinkedList<E> implements List<E>, Iterable<E> {
     @Override
     public E remove(int index) throws IndexOutOfBoundsException {
         LinkedNode<E> currentNode = head;
+        E nodeData = (E) new Object();
 
-        if (index < size) {
+        if (index < size && index >= 0) {
             for (int i = 0; i < size; i++) {
                 if (i == index) {
-                    currentNode.previous.next = currentNode.next;
-                    currentNode.next.previous = currentNode.previous;
+                    if (index == 0 && size == 1) {
+                        nodeData = currentNode.data;
+                        clear();
+                        return nodeData;
+                    }
+                    if (index > 0) {
+                        currentNode.previous.next = currentNode.next;
+                    }
+                    if (index < size - 1 && index > 0) {
+                        currentNode.next.previous = currentNode.previous;
+                    }
+                    if (index == 0) {
+                        nodeData = currentNode.data;
+                        removeFirst();
+                        break;
+                    }
+                    nodeData = currentNode.data;
                     currentNode.data = null;
                     currentNode.next = null;
                     currentNode.previous = null;
@@ -203,7 +218,7 @@ public class DoublyLinkedList<E> implements List<E>, Iterable<E> {
         } else {
             throw new IndexOutOfBoundsException("Index is out of range.");
         }
-        return currentNode.data;
+        return nodeData;
     }
 
     /**
