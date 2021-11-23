@@ -16,7 +16,7 @@ public class RecordData {
         //fileWriter.write("Test,Size,Time Taken");
     }
 
-    public void writeData(int size, long time) throws IOException {
+    public void writeData(int size, double time) throws IOException {
         fileWriter.write(size + "," + time + "\n");
     }
 
