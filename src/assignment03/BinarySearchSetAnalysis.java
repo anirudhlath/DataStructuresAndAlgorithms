@@ -12,8 +12,8 @@ import java.util.Random;
  */
 public class BinarySearchSetAnalysis {
     public static void main(String[] args) throws IOException, InterruptedException {
-        int power = 10;
-        RecordData data = new RecordData("assignment03data.csv");
+        int power = 1;
+        RecordData data = new RecordData("assignment03dataAdd.csv");
         // Create the experiment
         BinarySearchSet<Integer> set1 = new BinarySearchSet<>();
         Random random = new Random();
@@ -27,10 +27,14 @@ public class BinarySearchSetAnalysis {
         }
 
         while (power < 21) {
+            set1.remove(searchElement);
+
             while (set1.size() != size) {
                 int num = random.nextInt();
                 set1.add(num);
             }
+
+            set1.remove(searchElement);
 
 
 
@@ -53,7 +57,7 @@ public class BinarySearchSetAnalysis {
             startTime = System.nanoTime();
 
             for (long i = 0; i < timesToLoop; i++)
-                set1.contains(searchElement);
+                set1.add(searchElement);
 
             midpointTime = System.nanoTime();
 
@@ -73,7 +77,7 @@ public class BinarySearchSetAnalysis {
             data.writeData(power, averageTime);
 
             System.out.println(
-                    "It takes exactly " + averageTime + " nanoseconds to search " + searchElement + " in a sorted set of " + size + " integers.");
+                    "It takes exactly " + averageTime + " nanoseconds to add " + searchElement + " in a sorted set of " + size + " integers.");
             power++;
             size = Math.pow(2, power);
             set1.clear();
