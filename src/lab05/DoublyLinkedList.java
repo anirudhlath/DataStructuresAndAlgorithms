@@ -2,7 +2,6 @@ package lab05;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.Spliterator;
 import java.util.function.Consumer;
 
 public class DoublyLinkedList<E> implements List<E>, Iterable<E> {
@@ -29,9 +28,12 @@ public class DoublyLinkedList<E> implements List<E>, Iterable<E> {
         if (size == 0) {
             head = new LinkedNode<>(element);
             tail = head;
+            head.next = tail;
+            tail.previous = head;
         } else {
             LinkedNode<E> newNode = new LinkedNode<>(element);
             newNode.next = head;
+            head.previous = newNode;
             head = newNode;
         }
         size++;
@@ -47,11 +49,11 @@ public class DoublyLinkedList<E> implements List<E>, Iterable<E> {
     @Override
     public void addLast(E o) {
         if (size == 0) {
-            head = new LinkedNode<>(o);
-            tail = head;
+            addFirst(o);
         } else {
             LinkedNode<E> newNode = new LinkedNode<>(o);
             newNode.previous = tail;
+            tail.next = newNode;
             tail = newNode;
         }
         size++;
@@ -69,17 +71,22 @@ public class DoublyLinkedList<E> implements List<E>, Iterable<E> {
     @Override
     public void add(int index, E element) throws IndexOutOfBoundsException {
         LinkedNode<E> currentNode = head;
-        if (index < size) {
+        if (index < size || index >= 0) {
             for (int i = 0; i < size; i++) {
-                if (i == index) {
-                    LinkedNode<E> newNode = new LinkedNode<>(element);
-                    newNode.previous = currentNode.previous;
-                    newNode.next = currentNode;
-                    newNode.previous.next = newNode;
-                    newNode.next.previous = newNode;
-                    return;
+                if (size > 0) {
+                    if (i == index) {
+                        LinkedNode<E> newNode = new LinkedNode<>(element);
+                        newNode.previous = currentNode.previous;
+                        newNode.next = currentNode;
+                        newNode.previous.next = newNode;
+                        newNode.next.previous = newNode;
+                        size++;
+                        return;
+                    }
+                    currentNode = currentNode.next;
+                } else {
+                    addFirst(element);
                 }
-                currentNode = currentNode.next;
             }
         } else {
             throw new IndexOutOfBoundsException("The index is out of range.");
@@ -286,7 +293,7 @@ public class DoublyLinkedList<E> implements List<E>, Iterable<E> {
      */
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new CustomIterator();
     }
 
     /**
@@ -311,36 +318,19 @@ public class DoublyLinkedList<E> implements List<E>, Iterable<E> {
      */
     @Override
     public void forEach(Consumer<? super E> action) {
-        Iterable.super.forEach(action);
+        LinkedNode<E> temp = head;
+        while (temp != null) {
+            action.accept(temp.data);
+            temp = temp.next;
+        }
     }
 
-    /**
-     * Creates a {@link Spliterator} over the elements described by this
-     * {@code Iterable}.
-     *
-     * @return a {@code Spliterator} over the elements described by this
-     * {@code Iterable}.
-     * @implSpec The default implementation creates an
-     * <em><a href="../util/Spliterator.html#binding">early-binding</a></em>
-     * spliterator from the iterable's {@code Iterator}.  The spliterator
-     * inherits the <em>fail-fast</em> properties of the iterable's iterator.
-     * @implNote The default implementation should usually be overridden.  The
-     * spliterator returned by the default implementation has poor splitting
-     * capabilities, is unsized, and does not report any spliterator
-     * characteristics. Implementing classes can nearly always provide a
-     * better implementation.
-     * @since 1.8
-     */
-    @Override
-    public Spliterator<E> spliterator() {
-        return Iterable.super.spliterator();
-    }
 
     class LinkedNode<E> {
 
         E data;
-        DoublyLinkedList<E>.LinkedNode<E> previous;
-        DoublyLinkedList<E>.LinkedNode<E> next;
+        LinkedNode<E> previous;
+        LinkedNode<E> next;
 
         public LinkedNode(E data) {
             this.data = data;
@@ -348,5 +338,76 @@ public class DoublyLinkedList<E> implements List<E>, Iterable<E> {
             next = null;
         }
 
+    }
+
+    class CustomIterator implements Iterator<E> {
+
+        int currentIndex;
+        boolean canRemove;
+
+        public CustomIterator() {
+            currentIndex = 0;
+        }
+
+        /**
+         * Returns {@code true} if the iteration has more elements.
+         * (In other words, returns {@code true} if {@link #next} would
+         * return an element rather than throwing an exception.)
+         *
+         * @return {@code true} if the iteration has more elements
+         */
+        @Override
+        public boolean hasNext() {
+            return currentIndex < size;
+        }
+
+        /**
+         * Returns the next element in the iteration.
+         *
+         * @return the next element in the iteration
+         * @throws NoSuchElementException if the iteration has no more elements
+         */
+        @Override
+        public E next() {
+            if (currentIndex < size) {
+                canRemove = true;
+                return get(currentIndex++);
+            } else {
+                throw new NoSuchElementException("No such element exists.");
+            }
+
+        }
+
+        /**
+         * Removes from the underlying collection the last element returned
+         * by this iterator (optional operation).  This method can be called
+         * only once per call to {@link #next}.
+         * <p>
+         * The behavior of an iterator is unspecified if the underlying collection
+         * is modified while the iteration is in progress in any way other than by
+         * calling this method, unless an overriding class has specified a
+         * concurrent modification policy.
+         * <p>
+         * The behavior of an iterator is unspecified if this method is called
+         * after a call to the {@link #forEachRemaining forEachRemaining} method.
+         *
+         * @throws UnsupportedOperationException if the {@code remove}
+         *                                       operation is not supported by this iterator
+         * @throws IllegalStateException         if the {@code next} method has not
+         *                                       yet been called, or the {@code remove} method has already
+         *                                       been called after the last call to the {@code next}
+         *                                       method
+         * @implSpec The default implementation throws an instance of
+         * {@link UnsupportedOperationException} and performs no other action.
+         */
+        @Override
+        public void remove() {
+            if (canRemove) {
+                DoublyLinkedList.this.remove(currentIndex - 1);
+                canRemove = false;
+            } else {
+                throw new IllegalStateException("The item has already been removed.");
+            }
+        }
     }
 }
