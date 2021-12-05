@@ -16,6 +16,7 @@ public class SpellCheckerDemo {
 
     run_spell_check(mySC, "hello_world.txt");
     run_spell_check(mySC, "good_luck.txt");
+    mySC.printDictionary();
   }
 
   private static void run_spell_check(SpellChecker sc, String documentFilename) {

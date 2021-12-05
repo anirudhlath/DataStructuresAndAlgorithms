@@ -3,6 +3,7 @@ package assignment05;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.NoSuchElementException;
+import java.util.Stack;
 
 public class BinarySearchTree<T extends Comparable<? super T>> implements SortedSet<T> {
 
@@ -27,18 +28,28 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Sorted
     @Override
     public boolean add(T item) {
         if (item != null) {
-            Node currentNode;
-            currentNode = root;
+            Node currentNode = root;
+            Node previousNode = null;
             while (currentNode != null) {
+                previousNode = currentNode;
                 if (currentNode.data.compareTo(item) < 0) {
-                    currentNode = currentNode.left;
-                } else if (currentNode.data.compareTo(item) > 0) {
                     currentNode = currentNode.right;
                 } else {
-                    return false;
+                    if (currentNode.data.compareTo(item) == 0) {
+                        return false;
+                    }
+                    currentNode = currentNode.left;
                 }
             }
-            currentNode = new Node(item);
+
+            Node newNode = new Node(item);
+            if (this.root == null) { // If the list is empty add the item as root.
+                this.root = newNode;
+            } else if (item.compareTo(previousNode.data) < 0) { // Add the left child if the item is lower than the parent node.
+                previousNode.left = newNode;
+            } else { // Add the right child if the item is greater than the parent node.
+                previousNode.right = newNode;
+            }
             size++;
         } else {
             throw new NullPointerException("The item that you passed in is null.");
@@ -59,9 +70,11 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Sorted
     public boolean addAll(Collection<? extends T> items) {
         boolean hasChanged = false;
         for (T t: items) {
-            if (add(t)) {
+            if (t == null) {
+                throw new NullPointerException("One of the items passed in is null value.");
+            }
+            else if (add(t)) {
                 hasChanged = true;
-                size++;
             }
         }
         return hasChanged;
@@ -91,13 +104,13 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Sorted
      */
     @Override
     public boolean contains(T item) {
-        if (item != null && size > 0) {
+        if (item != null) {
             Node currentNode;
             currentNode = root;
-            while (currentNode.data != null) {
-                if (currentNode.data.compareTo(item) < 0) {
+            while (currentNode != null) {
+                if (currentNode.data.compareTo(item) > 0) {
                     currentNode = currentNode.left;
-                } else if (currentNode.data.compareTo(item) > 0) {
+                } else if (currentNode.data.compareTo(item) < 0) {
                     currentNode = currentNode.right;
                 } else {
                     return true;
@@ -122,8 +135,12 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Sorted
     public boolean containsAll(Collection<? extends T> items) {
         int count = 0;
         for (T t: items) {
-            if (contains(t)) {
-                count++;
+            if (t != null) {
+                if (contains(t)) {
+                    count++;
+                }
+            } else {
+                throw new NullPointerException("One of the items in the input is null.");
             }
         }
 
@@ -188,7 +205,7 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Sorted
      */
     @Override
     public boolean remove(T item) {
-        if (item != null) {
+        /*if (item != null) {
             Node currentNode; // Do we need a previous node too?
             currentNode = root;
             while (currentNode != null) {
@@ -197,6 +214,9 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Sorted
                 } else if (currentNode.data.compareTo(item) > 0) {
                     currentNode = currentNode.right;
                 } else {
+                    if (currentNode.data.compareTo(item) == 0) {
+                        currentNode = currentNode.right;
+                    }
                     currentNode = currentNode.right;
                     size--;
                     return true;
@@ -205,7 +225,69 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Sorted
         } else {
             throw new NullPointerException("The item that you passed in is null.");
         }
+        return false;*/
+        if (item != null) {
+            Node currentNode = root;
+            while (currentNode != null) {
+                if (currentNode.data.compareTo(item) < 0) {
+                    currentNode = currentNode.right;
+                } else {
+                    if (currentNode.data.compareTo(item) == 0) {
+                        if (size == 0) {
+                            System.out.println("The tree is empty.");
+                        } else if (size == 1) {
+                            clear();
+                        } else if (currentNode.left == null && currentNode.right == null) {
+                            currentNode.data = null;
+                        } else if (currentNode.left == null) {
+                            currentNode.data = currentNode.right.data;
+                            currentNode.left = currentNode.right.left;
+                            currentNode.right = currentNode.right.right;
+                        } else if (currentNode.right == null) {
+                            currentNode.data = currentNode.left.data;
+                            currentNode.right = currentNode.left.right;
+                            currentNode.left = currentNode.left.left;
+                        } else                                                            {
+                            // Find minimum in right subtree, delete that node and copy it over to current node.
+                            T data = findDeleteMin(currentNode.right);
+                            currentNode.data = data;
+                        }
+                        size--;
+                        return true;
+                    }
+                    currentNode = currentNode.left;
+                }
+            }
+        } else {
+            throw new NullPointerException("The item that you passed in is null.");
+        }
         return false;
+    }
+
+    private T findDeleteMin(Node node) {
+        Node temp = node;
+        Node parent = node;
+        while(temp.left != null) {
+            parent = temp;
+            temp = temp.left;
+        }
+        // temp should now be the minimum value in the subtree without a left child.
+
+        T data = temp.data;
+        if (temp.right != null) {
+            temp.data = temp.right.data;
+            temp.left = temp.right.left;
+            temp.right = temp.right.right;
+        } else {
+            if (temp.data.compareTo(parent.data) < 0) {
+                parent.left = null;
+            } else {
+                parent.right = null;
+            }
+        }
+
+
+        return data;
     }
 
     /**
@@ -222,9 +304,11 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Sorted
     public boolean removeAll(Collection<? extends T> items) {
         boolean hasChanged = false;
         for (T t: items) {
-            if (remove(t)) {
+            if (t == null) {
+                throw new NullPointerException("One of the items passed in is null value.");
+            }
+            else if (remove(t)) {
                 hasChanged = true;
-                size--;
             }
         }
         return hasChanged;
@@ -235,7 +319,7 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Sorted
      */
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     /**
@@ -245,13 +329,22 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Sorted
     @Override
     public ArrayList<T> toArrayList() {
         Node currentNode = root;
-        Node previousNode;
-        T[] arr = (T[]) new Object[size];
-        while (currentNode != null) {
-
-            currentNode = currentNode.left;
+        ArrayList<T> arr = new ArrayList<>();
+        Stack<Node> s = new Stack<>();
+        if (size > 0) {
+            while (currentNode != null || !s.isEmpty()) {
+                while (currentNode != null) {
+                    s.push(currentNode);
+                    currentNode = currentNode.left;
+                }
+                currentNode = s.pop();
+                arr.add(currentNode.data);
+                currentNode = currentNode.right;
+            }
+        } else {
+            System.out.println("The tree is empty.");
         }
-
+        return arr;
     }
 
     private class Node {
