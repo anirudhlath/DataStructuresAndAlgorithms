@@ -4,9 +4,11 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 /**
+ * The type Chaining hash table.
+ *
  * @author Anirudh Lath
  * @project CS6012
- * @created 12/06/2021 - 8:00 PM
+ * @created 12 /06/2021 - 8:00 PM
  */
 public class ChainingHashTable implements Set<String>{
 
@@ -15,6 +17,12 @@ public class ChainingHashTable implements Set<String>{
     private int size;
     private int collisionCount;
 
+    /**
+     * Instantiates a new Chaining hash table.
+     *
+     * @param capacity the capacity
+     * @param functor  the functor
+     */
     @SuppressWarnings("unchecked")
     public ChainingHashTable(int capacity, HashFunctor functor) {
         storage = (LinkedList<String>[]) new LinkedList[capacity];
@@ -24,6 +32,11 @@ public class ChainingHashTable implements Set<String>{
 
     }
 
+    /**
+     * Gets collision count.
+     *
+     * @return the collision count
+     */
     public int getCollisionCount() {
         return collisionCount;
     }
@@ -43,18 +56,18 @@ public class ChainingHashTable implements Set<String>{
     public boolean add(String item) {
         int arrIndex = convertHash(hasher.hash(item)); // Find the index based on the hash of the item.
 
-        if(storage[arrIndex] != null) {
-            if (storage[arrIndex].contains(item)) {
+        if(storage[arrIndex] != null) { // Prevent NullPointerException
+            if (storage[arrIndex].contains(item)) { // Check if the item exists.
                 return false;
             } else {
-                storage[arrIndex].add(item);
-                collisionCount++;
-                size++;
+                storage[arrIndex].add(item); // Add the item to the LinkedList
+                collisionCount++; // Increment collision since the LinkedList was not null and there adding another means a collision in that list.
+                size++; // Increment size
             }
         } else {
-            storage[arrIndex] = new LinkedList<>();
-            storage[arrIndex].add(item);
-            size++;
+            storage[arrIndex] = new LinkedList<>(); // If the LinkedList at arrIndex is null, create a new LinkedList.
+            storage[arrIndex].add(item); // Add the item to that LinkedList
+            size++; // Increment size
         }
 
         return true;
@@ -74,10 +87,10 @@ public class ChainingHashTable implements Set<String>{
         for (String s :
                 items) {
             if (add(s)) {
-                hasChanged = true;
+                hasChanged = true; // If the array was changed, set this to true.
             }
         }
-        return hasChanged;
+        return hasChanged; // Return the state of change
     }
 
     /**
@@ -85,7 +98,7 @@ public class ChainingHashTable implements Set<String>{
      * call.
      */
     @Override
-    public void clear() {
+    public void clear() { // Clear all the necessary variables.
         storage = (LinkedList<String>[]) new LinkedList[storage.length];
         size = 0;
         collisionCount = 0;
@@ -103,10 +116,10 @@ public class ChainingHashTable implements Set<String>{
     @Override
     public boolean contains(String item) {
         int arrIndex = convertHash(hasher.hash(item));
-        if (storage[arrIndex].contains(item)) {
-            return true;
+        if (storage[arrIndex] != null && storage[arrIndex].contains(item)) {
+            return true; // If the item is present in the LinkedList at arrIndex, return true
         }
-        return false;
+        return false; // Else if nothing is found return false
     }
 
     /**
@@ -123,10 +136,10 @@ public class ChainingHashTable implements Set<String>{
         for (String s :
                 items) {
             if (contains(s)) {
-                count++;
+                count++; // Increment if the current string, i.e. s is found.
             }
         }
-        return count == items.size();
+        return count == items.size(); // Check if all the elements were present and return the boolean state.
     }
 
     /**
@@ -147,10 +160,9 @@ public class ChainingHashTable implements Set<String>{
     @Override
     public boolean remove(String item) {
         int arrIndex = convertHash(hasher.hash(item));
-
-        if (storage[arrIndex].contains(item)) {
-            storage[arrIndex].remove(item);
-            size--;
+        if (storage[arrIndex] != null && storage[arrIndex].contains(item)) { // Prevent NullPointerException and check if the item is in the array
+            storage[arrIndex].remove(item); // Remove the item
+            size--; // Decrement the size
             return true;
         }
         return false;
@@ -172,10 +184,10 @@ public class ChainingHashTable implements Set<String>{
         for (String s :
                 items) {
             if (remove(s)) {
-                hasChanged = true;
+                hasChanged = true; // If any element from the list was removed, se hasChanged to true
             }
         }
-        return hasChanged;
+        return hasChanged; // Return true if the table was changed, else return false
     }
 
     /**

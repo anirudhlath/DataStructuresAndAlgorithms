@@ -1,9 +1,11 @@
 package assignment06;
 
 /**
+ * The type Good hash functor.
+ *
  * @author Anirudh Lath
  * @project CS6012
- * @created 12/06/2021 - 8:22 PM
+ * @created 12 /06/2021 - 8:22 PM
  */
 public class GoodHashFunctor implements HashFunctor {
     @Override

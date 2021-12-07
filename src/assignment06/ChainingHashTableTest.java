@@ -1,55 +1,164 @@
 package assignment06;
 
 import VisualizationHelper.RecordData;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
+ * The type Chaining hash table test.
+ *
  * @author Anirudh Lath
  * @project CS6012
- * @created 12/06/2021 - 9:13 PM
+ * @created 12 /06/2021 - 9:13 PM
  */
 public class ChainingHashTableTest {
+    /**
+     * The Exp.
+     */
     int exp = 5;
+    /**
+     * The Capacity.
+     */
     int capacity = (int) Math.pow(2, exp);
+    /**
+     * The Bad hash table.
+     */
     ChainingHashTable badHashTable = new ChainingHashTable(capacity, new BadHashFunctor());
+    /**
+     * The Med hash table.
+     */
     ChainingHashTable medHashTable = new ChainingHashTable(capacity, new MediocreHashFunctor());
+    /**
+     * The Good hash table.
+     */
     ChainingHashTable goodHashTable = new ChainingHashTable(capacity, new GoodHashFunctor());
-    String[] arr = new String[] {"true", "madden", "alive", "wine", "frame", "doctor", "though", "essence", "pin", "hold", "tail", "almost", "apply", "minister", "niece", "essence", "earn", "need", "degree", "water", "skirt", "afford", "boat", "weave", "sock", "nice", "passage", "soul", "shoot", "farm", "result", "just", "dear", "appoint", "mankind", "liar", "beak", "possible", "day", "tide", "upper", "audience", "pack", "eye", "widower", "several", "clever", "deer", "reed", "strict", "english"};
+    /**
+     * The List.
+     */
     ArrayList<String> list = new ArrayList<>();
-    File dictionary = new File("dictionary.txt");
-    Scanner scanner = new Scanner(dictionary);
+    /**
+     * The Dictionary.
+     */
+    File dictionary = new File("dictionary.txt"); // Please refer to the dictionary file in the assignment folder.
 
-    public ChainingHashTableTest() throws FileNotFoundException {
-    }
 
+    /**
+     * Sets up.
+     *
+     * @throws Exception the exception
+     */
     @Before
     public void setUp() throws Exception {
-
+        Scanner scanner = new Scanner(dictionary);
         while(scanner.hasNext()) {
             list.add(scanner.next());
         }
 
-        /*for (int i = 0; i < arr.length; i++) {
-            list.add(arr[i]);
-        }*/
+    }
+
+    /**
+     * Generic test.
+     */
+    @Test
+    public void genericTest() {
+        Assert.assertEquals(0, badHashTable.size());
+        Assert.assertEquals(0, medHashTable.size());
+        Assert.assertEquals(0, goodHashTable.size());
+        badHashTable.addAll(list);
+        medHashTable.addAll(list);
+        goodHashTable.addAll(list);
+        Assert.assertEquals(2914, badHashTable.size());
+        Assert.assertEquals(2914, medHashTable.size());
+        Assert.assertEquals(2914, goodHashTable.size());
+        Assert.assertFalse(badHashTable.isEmpty());
+        Assert.assertFalse(medHashTable.isEmpty());
+        Assert.assertFalse(goodHashTable.isEmpty());
+        badHashTable.clear();
+        medHashTable.clear();
+        goodHashTable.clear();
+        Assert.assertEquals(0, badHashTable.size());
+        Assert.assertEquals(0, medHashTable.size());
+        Assert.assertEquals(0, goodHashTable.size());
+        Assert.assertTrue(badHashTable.isEmpty());
+        Assert.assertTrue(medHashTable.isEmpty());
+        Assert.assertTrue(goodHashTable.isEmpty());
 
     }
 
+    /**
+     * Addition test.
+     */
+    @Test
+    public void additionTest() {
+        Assert.assertTrue(badHashTable.add("Anirudh"));
+        Assert.assertFalse(badHashTable.add("Anirudh"));
+        Assert.assertTrue(medHashTable.add("Anirudh"));
+        Assert.assertFalse(medHashTable.add("Anirudh"));
+        Assert.assertTrue(goodHashTable.add("Anirudh"));
+        Assert.assertFalse(goodHashTable.add("Anirudh"));
+        Assert.assertEquals(1, badHashTable.size());
+        Assert.assertEquals(1, medHashTable.size());
+        Assert.assertEquals(1, goodHashTable.size());
+
+    }
+
+    /**
+     * Contains test.
+     */
+    @Test
+    public void containsTest() {
+        Assert.assertFalse(badHashTable.contains("Anirudh"));
+        Assert.assertTrue(badHashTable.add("Anirudh"));
+        Assert.assertTrue(badHashTable.contains("Anirudh"));
+        Assert.assertFalse(medHashTable.contains("Anirudh"));
+        Assert.assertTrue(medHashTable.add("Anirudh"));
+        Assert.assertTrue(medHashTable.contains("Anirudh"));
+        Assert.assertFalse(goodHashTable.contains("Anirudh"));
+        Assert.assertTrue(goodHashTable.add("Anirudh"));
+        Assert.assertTrue(goodHashTable.contains("Anirudh"));
+
+    }
+
+    /**
+     * Remove test.
+     */
+    @Test
+    public void removeTest() {
+        Assert.assertFalse(badHashTable.remove("Anirudh"));
+        Assert.assertTrue(badHashTable.add("Anirudh"));
+        Assert.assertTrue(badHashTable.remove("Anirudh"));
+        Assert.assertFalse(medHashTable.remove("Anirudh"));
+        Assert.assertTrue(medHashTable.add("Anirudh"));
+        Assert.assertTrue(medHashTable.remove("Anirudh"));
+        Assert.assertFalse(goodHashTable.remove("Anirudh"));
+        Assert.assertTrue(goodHashTable.add("Anirudh"));
+        Assert.assertTrue(goodHashTable.remove("Anirudh"));
+        Assert.assertFalse(badHashTable.remove("Anirudh"));
+        Assert.assertFalse(medHashTable.remove("Anirudh"));
+        Assert.assertFalse(goodHashTable.remove("Anirudh"));
+    }
+
+
+    /**
+     * Bad hash addition analysis.
+     *
+     * @throws InterruptedException the interrupted exception
+     * @throws IOException          the io exception
+     */
     @Test
     public void badHashAdditionAnalysis() throws InterruptedException, IOException {
         RecordData data = new RecordData("badHashTiming.csv");
         RecordData data2 = new RecordData("badHashCollision.csv");
 
         /* Collect Data
-        ** First, spin computing stuff until one second has gone by.
-        ** This allows this thread to stabilize.
+         ** First, spin computing stuff until one second has gone by.
+         ** This allows this thread to stabilize.
          */
         long startTime, midpointTime, stopTime;
         long timesToLoop = 10000;
@@ -63,7 +172,7 @@ public class ChainingHashTableTest {
 
         for (long i = 0; i < timesToLoop; i++)
             badHashTable.addAll(list);
-            badHashTable.clear();
+        badHashTable.clear();
 
         midpointTime = System.nanoTime();
 
@@ -96,6 +205,12 @@ public class ChainingHashTableTest {
         }
     }
 
+    /**
+     * Mediocre hash addition analysis.
+     *
+     * @throws InterruptedException the interrupted exception
+     * @throws IOException          the io exception
+     */
     @Test
     public void mediocreHashAdditionAnalysis() throws InterruptedException, IOException {
         RecordData data = new RecordData("medHashTiming.csv");
@@ -150,6 +265,12 @@ public class ChainingHashTableTest {
         }
     }
 
+    /**
+     * Good hash addition analysis.
+     *
+     * @throws InterruptedException the interrupted exception
+     * @throws IOException          the io exception
+     */
     @Test
     public void goodHashAdditionAnalysis() throws InterruptedException, IOException {
         RecordData data = new RecordData("goodHashTiming.csv");
