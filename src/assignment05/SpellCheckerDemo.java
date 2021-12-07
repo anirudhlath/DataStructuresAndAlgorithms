@@ -5,11 +5,16 @@ import java.util.List;
 
 /**
  * A small demonstration of the SpellChecker class.
- * 
+ *
  * @author
  */
 public class SpellCheckerDemo {
 
+  /**
+   * The entry point of application.
+   *
+   * @param args the input arguments
+   */
   public static void main(String[] args) {
 
     SpellChecker mySC = new SpellChecker(new File("dictionary.txt"));

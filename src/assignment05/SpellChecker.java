@@ -9,7 +9,7 @@ import java.util.Scanner;
 /**
  * Represents a "dictionary" of strings using a binary search tree and offers
  * methods for spell-checking documents.
- * 
+ *
  * @author
  */
 public class SpellChecker {
@@ -25,9 +25,8 @@ public class SpellChecker {
 
   /**
    * Constructor--creates dictionary from a list of words.
-   * 
-   * @param words
-   *          - the List of Strings used to build the dictionary
+   *
+   * @param words - the List of Strings used to build the dictionary
    */
   public SpellChecker(List<String> words) {
     this();
@@ -36,9 +35,8 @@ public class SpellChecker {
 
   /**
    * Constructor--creates dictionary from a file.
-   * 
-   * @param dictionaryFile
-   *          - the File that contains Strings used to build the dictionary
+   *
+   * @param dictionaryFile - the File that contains Strings used to build the dictionary
    */
   public SpellChecker(File dictionaryFile) {
     this();
@@ -47,9 +45,8 @@ public class SpellChecker {
 
   /**
    * Add a word to the dictionary.
-   * 
-   * @param word
-   *          - the String to be added to the dictionary
+   *
+   * @param word - the String to be added to the dictionary
    */
   public void addToDictionary(String word) {
     dictionary.add(word);
@@ -57,9 +54,8 @@ public class SpellChecker {
 
   /**
    * Remove a word from the dictionary.
-   * 
-   * @param word
-   *          - the String to be removed from the dictionary
+   *
+   * @param word - the String to be removed from the dictionary
    */
   public void removeFromDictionary(String word) {
     dictionary.remove(word);
@@ -67,9 +63,8 @@ public class SpellChecker {
 
   /**
    * Spell-checks a document against the dictionary.
-   * 
-   * @param documentFile
-   *          - the File that contains Strings to be looked up in the dictionary
+   *
+   * @param documentFile - the File that contains Strings to be looked up in the dictionary
    * @return a List of misspelled words
    */
   public List<String> spellCheck(File documentFile) {
@@ -78,9 +73,9 @@ public class SpellChecker {
     List<String> misspelledWords = new ArrayList<>();
 
     for (String str :
-            wordsToCheck) {
+            wordsToCheck) { // iterate through each word in the list of words to check.
       if (!dictionary.contains(str)) {
-        misspelledWords.add(str);
+        misspelledWords.add(str); // If the word is not in the dictionary, it means it is misspelled and should be added to the list of misspelled words.
       }
     }
 
@@ -140,7 +135,19 @@ public class SpellChecker {
     return words;
   }
 
-  public void printDictionary() {
+  /**
+   * Print dictionary.
+   */
+  protected void printDictionary() {
     System.out.println(dictionary.toArrayList());
+  }
+
+  /**
+   * Dictionary array array list.
+   *
+   * @return the array list
+   */
+  protected ArrayList<String> dictionaryArray() {
+    return dictionary.toArrayList();
   }
 }
