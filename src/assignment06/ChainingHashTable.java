@@ -11,11 +11,25 @@ import java.util.LinkedList;
 public class ChainingHashTable implements Set<String>{
 
     private LinkedList<String>[] storage;
+    private HashFunctor hasher;
+    private int size;
+    private int collisionCount;
 
     @SuppressWarnings("unchecked")
     public ChainingHashTable(int capacity, HashFunctor functor) {
         storage = (LinkedList<String>[]) new LinkedList[capacity];
+        hasher = functor;
+        size = 0;
+        collisionCount = 0;
 
+    }
+
+    public int getCollisionCount() {
+        return collisionCount;
+    }
+
+    private int convertHash(int hash) {
+        return Math.abs(hash % storage.length);
     }
 
     /**
@@ -27,7 +41,23 @@ public class ChainingHashTable implements Set<String>{
      */
     @Override
     public boolean add(String item) {
-        return false;
+        int arrIndex = convertHash(hasher.hash(item)); // Find the index based on the hash of the item.
+
+        if(storage[arrIndex] != null) {
+            if (storage[arrIndex].contains(item)) {
+                return false;
+            } else {
+                storage[arrIndex].add(item);
+                collisionCount++;
+                size++;
+            }
+        } else {
+            storage[arrIndex] = new LinkedList<>();
+            storage[arrIndex].add(item);
+            size++;
+        }
+
+        return true;
     }
 
     /**
@@ -40,7 +70,14 @@ public class ChainingHashTable implements Set<String>{
      */
     @Override
     public boolean addAll(Collection<? extends String> items) {
-        return false;
+        boolean hasChanged = false;
+        for (String s :
+                items) {
+            if (add(s)) {
+                hasChanged = true;
+            }
+        }
+        return hasChanged;
     }
 
     /**
@@ -49,6 +86,9 @@ public class ChainingHashTable implements Set<String>{
      */
     @Override
     public void clear() {
+        storage = (LinkedList<String>[]) new LinkedList[storage.length];
+        size = 0;
+        collisionCount = 0;
 
     }
 
@@ -62,6 +102,10 @@ public class ChainingHashTable implements Set<String>{
      */
     @Override
     public boolean contains(String item) {
+        int arrIndex = convertHash(hasher.hash(item));
+        if (storage[arrIndex].contains(item)) {
+            return true;
+        }
         return false;
     }
 
@@ -75,7 +119,14 @@ public class ChainingHashTable implements Set<String>{
      */
     @Override
     public boolean containsAll(Collection<? extends String> items) {
-        return false;
+        int count = 0;
+        for (String s :
+                items) {
+            if (contains(s)) {
+                count++;
+            }
+        }
+        return count == items.size();
     }
 
     /**
@@ -83,7 +134,7 @@ public class ChainingHashTable implements Set<String>{
      */
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     /**
@@ -95,7 +146,15 @@ public class ChainingHashTable implements Set<String>{
      */
     @Override
     public boolean remove(String item) {
+        int arrIndex = convertHash(hasher.hash(item));
+
+        if (storage[arrIndex].contains(item)) {
+            storage[arrIndex].remove(item);
+            size--;
+            return true;
+        }
         return false;
+
     }
 
     /**
@@ -109,7 +168,14 @@ public class ChainingHashTable implements Set<String>{
      */
     @Override
     public boolean removeAll(Collection<? extends String> items) {
-        return false;
+        boolean hasChanged = false;
+        for (String s :
+                items) {
+            if (remove(s)) {
+                hasChanged = true;
+            }
+        }
+        return hasChanged;
     }
 
     /**
@@ -117,6 +183,6 @@ public class ChainingHashTable implements Set<String>{
      */
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 }
